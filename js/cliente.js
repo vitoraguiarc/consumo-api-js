@@ -2,8 +2,8 @@
 
 const url = 'https://testeleonid.herokuapp.com/clientes'
 
-const readCustomers = async () => {
-    const response = await fetch(url)
+const readCustomers = async (id='') => {
+    const response = await fetch(`${url}/${id}`)
     return await response.json()
 }
 
@@ -30,8 +30,13 @@ const deleteClient = async (codigo) => {
 
 }
 
+const updateClient = async(id) => {
+    const client = await readCustomers(codigo)
+    client.codigo = codigo
+}
+
 
 
 export {
-    readCustomers, createClient, deleteClient
+    readCustomers, createClient, deleteClient, updateClient
 }

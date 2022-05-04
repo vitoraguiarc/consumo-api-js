@@ -1,21 +1,35 @@
 'use strict'
 
 import {openModal, closeModal} from './modal.js'
-import {readCustomers, createClient, deleteClient} from './cliente.js'
+import {readCustomers, createClient, deleteClient, updateClient} from './cliente.js'
 
-const createRow = (client) => {
+const createRow = ({nome, email, celular, cidade, id}) => {
     const row = document.createElement('tr')
     row.innerHTML = `
-        <td>${client.nome}</td>
-        <td>${client.email}</td>
-        <td>${client.celular}</td>
-        <td>${client.cidade}</td>
+        <td>${nome}</td>
+        <td>${email}</td>
+        <td>${celular}</td>
+        <td>${cidade}</td>
         <td>
-            <button type="button" class="button green" id="editar-${client.id}">editar</button>
-            <button type="button" class="button red"  id="excluir-${client.id}">excluir</button>
+            <button type="button" class="button green" onClick="editClient(${id})">editar</button>
+            <button type="button" class="button red" onClick="delClient(${id})">excluir</button>
         </td>
     `
     return row
+}
+
+globalThis.delClient = async (id) => {
+    await deleteClient(id)
+    updateTable
+}
+
+globalThis.editClient = async (id) => {
+    //armazenar as informações do cliente selecionado
+    const client = await readCustomers(id)
+
+    console.log(client)
+
+    //preencher o formulario com as informações
 }
 
 
@@ -53,18 +67,19 @@ const saveClient = async () => {
 }
 
 
-const actionCliente = async (event) => {
-    if (event.target.type == 'button') {
-        const [action, codigo] = event.target.id.split('-')
-        if (action == 'editar') {
-            //function editar
-        } else if (action== "excluir") {
-            await deleteClient(codigo)
-            updateTable()
-        }
+// const actionCliente = async (event) => {
+//     if (event.target.type == 'button') {
+//         const [action, codigo] = event.target.id.split('-')
+//         if (action == 'editar') {
+//             await updateClient(codigo)
+//             openModal()
+//         } else if (action== "excluir") {
+//             await deleteClient(codigo)
+//             updateTable()
+//         }
             
-    }
-}
+//     }
+// }
 
 updateTable()
 
