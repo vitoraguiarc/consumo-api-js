@@ -18,6 +18,14 @@ const createRow = ({nome, email, celular, cidade, id}) => {
     return row
 }
 
+const fillForm = (client) => {
+    document.getElementById('nome').value = client.nome
+    document.getElementById('email').value = client.email
+    document.getElementById('celular').value = client.celular
+    document.getElementById('cidade').value = client.cidade
+    document.getElementById('nome').dataset.id = client.id
+}
+
 globalThis.delClient = async (id) => {
     await deleteClient(id)
     updateTable
@@ -27,10 +35,13 @@ globalThis.editClient = async (id) => {
     //armazenar as informações do cliente selecionado
     const client = await readCustomers(id)
 
-    console.log(client)
-
     //preencher o formulario com as informações
+    fillForm(client)
+
+    //abrir o modal
+    openModal()
 }
+
 
 
 const updateTable = async () => {
@@ -46,6 +57,8 @@ const updateTable = async () => {
     
 }
 
+const isEdit = () => document.getElementById('nome').hasAttribute('data-id')
+
 const saveClient = async () => {
     // criar um json com as informações do cliente
     const client = {
@@ -56,13 +69,15 @@ const saveClient = async () => {
         "cidade": document.getElementById('cidade').value
     }
 
-    // enviar o json para o servidor API
-    await createClient(client)
+    if (isEdit()) {
+        client.id = document.getElementById('nome').dataset.id
+        await updateClient(client)
+    } else {
+         createClient(client)
+    }
 
-    // fechar a modal
     closeModal()
 
-    // atualizar a tabela
     updateTable()
 }
 
@@ -86,4 +101,3 @@ updateTable()
 // Eventos
 document.getElementById('cadastrarCliente').addEventListener('click', openModal)
 document.getElementById('salvar').addEventListener('click', saveClient)
-document.getElementById('clients-container').addEventListener('click', actionCliente)
