@@ -24,6 +24,7 @@ const fillForm = (client) => {
     document.getElementById('celular').value = client.celular
     document.getElementById('cidade').value = client.cidade
     document.getElementById('nome').dataset.id = client.id
+    document.getElementById('modal-image').src = client.foto
 }
 
 globalThis.delClient = async (id) => {
@@ -69,7 +70,8 @@ const saveClient = async () => {
         "nome": document.getElementById('nome').value,
         "email": document.getElementById('email').value,
         "celular": document.getElementById('celular').value,
-        "cidade": document.getElementById('cidade').value
+        "cidade": document.getElementById('cidade').value,
+        "foto": document.getElementById('modal-image').src
     }
 
     if(form.reportValidity()) {
@@ -103,6 +105,21 @@ const saveClient = async () => {
 
 updateTable()
 
+const maskCellphone = ({target}) => {
+   
+    let text = target.value
+
+   text = text.replace(/[^0-9]/g,'')
+
+   text = text.replace(/(.{2})(.{5})(.{4})/, '($1) $2-$3')
+
+   text = text.replace(/(.{15})(.*)/, '$1')
+
+   target.value = text
+}
+
+
 // Eventos
 document.getElementById('cadastrarCliente').addEventListener('click', openModal)
 document.getElementById('salvar').addEventListener('click', saveClient)
+document.getElementById('celular').addEventListener('keyup', maskCellphone)
