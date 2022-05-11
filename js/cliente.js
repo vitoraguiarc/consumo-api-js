@@ -1,6 +1,7 @@
 'use strict'
 
 const url = 'https://testeleonid.herokuapp.com/clientes'
+// const url = 'http://localhost/vitor/js/clientes'
 
 const readCustomers = async (id='') => {
     const response = await fetch(`${url}/${id}`)

@@ -60,6 +60,9 @@ const updateTable = async () => {
 const isEdit = () => document.getElementById('nome').hasAttribute('data-id')
 
 const saveClient = async () => {
+
+    const form = document.getElementById('modal-form')
+
     // criar um json com as informações do cliente
     const client = {
         "id": "",
@@ -69,16 +72,18 @@ const saveClient = async () => {
         "cidade": document.getElementById('cidade').value
     }
 
-    if (isEdit()) {
-        client.id = document.getElementById('nome').dataset.id
-        await updateClient(client)
-    } else {
-         createClient(client)
+    if(form.reportValidity()) {
+        if (isEdit()) {
+            client.id = document.getElementById('nome').dataset.id
+            await updateClient(client)
+        } else {
+             createClient(client)
+        }
+
+        closeModal()
+
+        updateTable()
     }
-
-    closeModal()
-
-    updateTable()
 }
 
 
